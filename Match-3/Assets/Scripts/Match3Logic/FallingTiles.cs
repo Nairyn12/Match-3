@@ -22,11 +22,8 @@ public class FallingTiles : MonoBehaviour
     }      
 
     public void WorkWithMovingTiles()
-    {
-        //Debug.Log("Ищем двигающиеся объекты!" + deleteTiles.Count);
-        //Debug.Log(deleteTiles.Count);
-        FindDownMovingTiles();
-        //Debug.Log("Двигающиеся объекты!" + downMovingTiles.Count);
+    {      
+        FindDownMovingTiles();       
         MoveTiles();
         ClearList();
     }
@@ -37,8 +34,7 @@ public class FallingTiles : MonoBehaviour
         {
             if (deleteTiles[i].MatchTilesUp != null)
             {
-                downMovingTiles.Add(deleteTiles[i].MatchTilesUp);
-                //Debug.Log("Двигающиеся объекты!");
+                downMovingTiles.Add(deleteTiles[i].MatchTilesUp);                
             }
         }
     }   
@@ -54,8 +50,6 @@ public class FallingTiles : MonoBehaviour
     public void EnableTileMovement (TileEnvironmentDeterminer ted)
     {
         StartCoroutine(ted.DelayToStartMove());
-
-        //Debug.Log(ted.gameObject.name);
 
         if (ted.MatchTilesUp != null)
         {

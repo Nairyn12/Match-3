@@ -558,6 +558,7 @@ MonoBehaviour:
   moveCount: {fileID: 1957119577}
   counterMovesImage: {fileID: 71898958}
   finishPanel: {fileID: 660799843}
+  buyMovesButton: {fileID: 1036451535}
 --- !u!1 &235905113
 GameObject:
   m_ObjectHideFlags: 0

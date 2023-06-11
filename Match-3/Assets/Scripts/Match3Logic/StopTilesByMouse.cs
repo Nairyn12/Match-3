@@ -12,7 +12,7 @@ public class StopTilesByMouse : MonoBehaviour
     [SerializeField] private bool isChecking;
     [SerializeField] private int check;
 
-    private QuestOfMatchThree quest;
+    private CounterMoves quest;
 
     private void Awake()
     {
@@ -21,7 +21,7 @@ public class StopTilesByMouse : MonoBehaviour
 
     private void Start()
     {
-        quest = GetComponent<QuestOfMatchThree>();
+        quest = GetComponent<CounterMoves>();
     }
 
     void Update()

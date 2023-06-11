@@ -4,13 +4,5 @@ using UnityEngine;
 
 public class PeriodicityOfAttacks : MonoBehaviour
 {
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
+   
 }

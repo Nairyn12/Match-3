@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TileEnvironmentDeterminer : MonoBehaviour
-{
-    public Action eventClearTile;
-
+{   
     [SerializeField] private int matchCount;
     [SerializeField] private bool onHorizontalMatchLeft;
     [SerializeField] private bool onHorizontalMatchRight;
@@ -46,9 +44,7 @@ public class TileEnvironmentDeterminer : MonoBehaviour
     {
         mad = FindObjectOfType<MatchAndDestroy>();
         gt = FindObjectOfType<GenerateTiles>();
-        rb = GetComponent<Rigidbody2D>();
-        eventClearTile += ClearingNeighborTiles; 
-        eventClearTile += FindMatchesNearby;
+        rb = GetComponent<Rigidbody2D>();        
     }
 
     private void Start()
@@ -68,7 +64,7 @@ public class TileEnvironmentDeterminer : MonoBehaviour
 
         if (transform.position.y <= 3.5f)
         {
-            matchTilesUp = LaunchSearchBeamTiles(Vector2.up, 0.7f);
+            matchTilesUp = FindTileInDirection(Vector2.up, 0.7f);
         }
 
         ClearingNeighborTiles(); 
@@ -90,48 +86,40 @@ public class TileEnvironmentDeterminer : MonoBehaviour
     {
         matchCount = 0;
 
-        FindMatchesNearby();
+        FindNeighboringTiles();
 
-        if (onVerticalMatchUp && onVerticalMatchDown)
+        if (HasSameTag(matchTilesUp) && HasSameTag(matchTilesDown))
         {
             matchCount++;
         }
 
-        if (onHorizontalMatchLeft && onHorizontalMatchRight)
+        if (HasSameTag(matchTilesRight) && HasSameTag(matchTilesLeft))
         {
             matchCount++;
         }
 
         return matchCount;
-    }
-
-    public void FindMatchesNearby()
-    {
-        FindNeighboringTiles();
-
-        CheckTagMatch(matchTilesUp, ref onVerticalMatchUp);
-        CheckTagMatch(matchTilesDown, ref onVerticalMatchDown);
-        CheckTagMatch(matchTilesRight, ref onHorizontalMatchRight);
-        CheckTagMatch(matchTilesLeft, ref onHorizontalMatchLeft);
-    }
+    }  
 
     public void FindNeighboringTiles()
     {
-        matchTilesUp = LaunchSearchBeamTiles(Vector2.up, 0.7f);        
-        matchTilesDown = LaunchSearchBeamTiles(Vector2.down, 0.7f);
-        matchTilesRight = LaunchSearchBeamTiles(Vector2.right, 0.7f);
-        matchTilesLeft = LaunchSearchBeamTiles(Vector2.left, 0.7f);
-    }
+        matchTilesUp = FindTileInDirection(Vector2.up, 0.7f);        
+        matchTilesDown = FindTileInDirection(Vector2.down, 0.7f);
+        matchTilesRight = FindTileInDirection(Vector2.right, 0.7f);
+        matchTilesLeft = FindTileInDirection(Vector2.left, 0.7f);
+    }    
 
-    private void CheckTagMatch(TileEnvironmentDeterminer ted, ref bool match)
+    private bool HasSameTag(TileEnvironmentDeterminer ted)
     {
         if (ted != null)
         {
             if (ted.gameObject.tag == gameObject.tag)
             {
-                match = true;
+                return true;
             }
         }
+
+        return false;
     }
 
     public void RayForFindTileChange(out TileEnvironmentDeterminer t, Vector2 dir)
@@ -187,7 +175,7 @@ public class TileEnvironmentDeterminer : MonoBehaviour
         RedefiningAdjacentTiles();        
     }
 
-    public TileEnvironmentDeterminer LaunchSearchBeamTiles(Vector2 v, float distance)
+    public TileEnvironmentDeterminer FindTileInDirection(Vector2 v, float distance)
     {
         RaycastHit2D hit2D = Physics2D.Raycast(transform.position, v, distance);
 
@@ -261,10 +249,7 @@ public class TileEnvironmentDeterminer : MonoBehaviour
         StartCoroutine(DelayToUpdateAdjacentTiles());
         isMoving = false;
         StopTilesByMouse.Instance.CheckTilesOnMoving();
-        //if (temp && matchTilesDown != null)
-        //{
-        //    transform.position = new Vector2(transform.position.x, RoundToFraction(MatchTilesDown.gameObject.transform.position.y, 0.5f) + 1.0f);
-        //}
+      
         if (matchTilesUp != null) MatchTilesUp.StopTiles();
     }
    

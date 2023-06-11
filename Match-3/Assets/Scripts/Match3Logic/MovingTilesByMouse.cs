@@ -10,7 +10,7 @@ public class MovingTilesByMouse : MonoBehaviour
     
     private TileEnvironmentDeterminer ted, ted2;    
     private MatchAndDestroy mad;
-    private QuestOfMatchThree quest;
+    private CounterMoves quest;
 
     public bool CanBeMoved { get; set; }
 
@@ -21,7 +21,7 @@ public class MovingTilesByMouse : MonoBehaviour
     void Start()
     {
         mad = GetComponent<MatchAndDestroy>();
-        quest = GetComponent<QuestOfMatchThree>();
+        quest = GetComponent<CounterMoves>();
         isTileSelected = false;
         isCoroutine = false;
         CanBeMoved = true;
