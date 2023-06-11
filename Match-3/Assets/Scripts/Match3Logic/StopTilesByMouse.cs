@@ -12,9 +12,16 @@ public class StopTilesByMouse : MonoBehaviour
     [SerializeField] private bool isChecking;
     [SerializeField] private int check;
 
+    private QuestOfMatchThree quest;
+
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Start()
+    {
+        quest = GetComponent<QuestOfMatchThree>();
     }
 
     void Update()
@@ -34,16 +41,23 @@ public class StopTilesByMouse : MonoBehaviour
         {
             if (gt.TilesOnField[i].IsMoving == true)
             {
-                check++;
+                for (int j = 0; i < gt.TilesOnField.Count; i++)
+                {
+                    if (gt.TilesOnField[j].FindMatch() > 0)
+                    {
+                        check++;
+                    }
+                }
             }
         }
         Debug.Log("Check: " + check);
 
         if (check == 0)
-        {
+        {            
             Debug.Log("Совпадений ноль ");
             moveTiles.CanBeMoved = true;
             Debug.Log("moveTiles.CanBeMoved " + moveTiles.CanBeMoved);
+            quest.OnFinishPanel();
         }
         else if (check > 0)
         {

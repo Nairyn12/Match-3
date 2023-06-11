@@ -13,7 +13,7 @@ public class MatchAndDestroy : MonoBehaviour
     [SerializeField] private FallingTiles ft;    
     
     private TileEnvironmentDeterminer ted1, ted2;
-    private ResourceCounter rc;
+    private ResourceCounter rc;    
 
     public TileEnvironmentDeterminer Ted1
     {

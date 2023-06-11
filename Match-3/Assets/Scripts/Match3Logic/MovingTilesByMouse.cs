@@ -7,9 +7,10 @@ public class MovingTilesByMouse : MonoBehaviour
     [SerializeField] private Camera cam;     
     [SerializeField] private bool isTileSelected;    
     [SerializeField] private bool isCoroutine;
-    [SerializeField] private TileEnvironmentDeterminer ted, ted2;
-    [SerializeField] private MatchAndDestroy mad;
-    [SerializeField] private int countOfMoving;
+    
+    private TileEnvironmentDeterminer ted, ted2;    
+    private MatchAndDestroy mad;
+    private QuestOfMatchThree quest;
 
     public bool CanBeMoved { get; set; }
 
@@ -20,6 +21,7 @@ public class MovingTilesByMouse : MonoBehaviour
     void Start()
     {
         mad = GetComponent<MatchAndDestroy>();
+        quest = GetComponent<QuestOfMatchThree>();
         isTileSelected = false;
         isCoroutine = false;
         CanBeMoved = true;
@@ -27,7 +29,7 @@ public class MovingTilesByMouse : MonoBehaviour
    
     void Update()
     { 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !isTileSelected)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !isTileSelected && quest.CountOfMoves > 0)
         {
             startPosMouse = cam.ScreenToWorldPoint(Input.mousePosition);
             MouseCapturesATile();
@@ -164,6 +166,7 @@ public class MovingTilesByMouse : MonoBehaviour
         if (ted.FindMatch() > 0 || ted2.FindMatch() > 0)
         {
             mad.FindAndDestroyMatch();
+            quest.CountOfMoves--;
             ClearingTheValues();
         }
         else
