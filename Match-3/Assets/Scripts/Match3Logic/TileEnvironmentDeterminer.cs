@@ -5,11 +5,7 @@ using UnityEngine;
 
 public class TileEnvironmentDeterminer : MonoBehaviour
 {   
-    [SerializeField] private int matchCount;
-    [SerializeField] private bool onHorizontalMatchLeft;
-    [SerializeField] private bool onHorizontalMatchRight;
-    [SerializeField] private bool onVerticalMatchUp;
-    [SerializeField] private bool onVerticalMatchDown;
+    [SerializeField] private int matchCount;   
 
     [SerializeField] private TileEnvironmentDeterminer matchTilesUp;
     [SerializeField] private TileEnvironmentDeterminer matchTilesDown;
@@ -45,14 +41,6 @@ public class TileEnvironmentDeterminer : MonoBehaviour
         mad = FindObjectOfType<MatchAndDestroy>();
         gt = FindObjectOfType<GenerateTiles>();
         rb = GetComponent<Rigidbody2D>();        
-    }
-
-    private void Start()
-    {
-        onHorizontalMatchLeft = false;
-        onHorizontalMatchRight = false;
-        onVerticalMatchUp = false;
-        onVerticalMatchDown = false;        
     }
 
     private void Update()

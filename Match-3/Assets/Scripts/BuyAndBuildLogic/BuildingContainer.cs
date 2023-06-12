@@ -19,6 +19,8 @@ public class BuildingContainer : MonoBehaviour
 
     [SerializeField] private GameManager gm;
 
+    [SerializeField] private BuildingPosition _bp;
+
     public List<Stockade> Stockades
     {
         get => stockades;
@@ -69,12 +71,35 @@ public class BuildingContainer : MonoBehaviour
 
     public void AddListBuild(int variant)
     {
-        if (variant == 7) stockades.Add(new());
-        else if (variant == 8) forges.Add(new());
-        else if (variant == 9) barracks.Add(new());
-        else if (variant == 10) mageTowers.Add(new());
-        else if (variant == 11) markets.Add(new());
-        else if (variant == 12) dragonCaves.Add(new());
+        if (variant == 7)
+        {
+            stockades.Add(new());
+
+        }
+        else if (variant == 8)
+        {
+            forges.Add(new());
+            _bp.OnBuilding(forges.Count, _bp._forgeGO);
+        }
+        else if (variant == 9)
+        {
+            barracks.Add(new());
+            _bp.OnBuilding(barracks.Count, _bp._barrackGO);
+        }
+        else if (variant == 10)
+        {
+            mageTowers.Add(new());
+            _bp.OnBuilding(mageTowers.Count, _bp._mageTowerGO);
+        }
+        else if (variant == 11)
+        {
+            markets.Add(new());
+            _bp.OnBuilding(markets.Count, _bp._marketGO);
+        }
+        else if (variant == 12)
+        {
+            dragonCaves.Add(new());
+        }
 
         PrintCountBuildings();
     }
@@ -111,15 +136,37 @@ public class BuildingContainer : MonoBehaviour
     {
         for (int i = 0; i < allBuildings.Count; i++)
         {
-            if (allBuildings[i].Health <= 0 && allBuildings[i] is Stockade) stockades.Remove(allBuildings[i] as Stockade);
-            else if (allBuildings[i].Health <= 0 && allBuildings[i] is Forge) forges.Remove(allBuildings[i] as Forge);
-            else if (allBuildings[i].Health <= 0 && allBuildings[i] is Barracks) barracks.Remove(allBuildings[i] as Barracks);
-            else if (allBuildings[i].Health <= 0 && allBuildings[i] is MageTower) mageTowers.Remove(allBuildings[i] as MageTower);
-            else if (allBuildings[i].Health <= 0 && allBuildings[i] is Market) markets.Remove(allBuildings[i] as Market);
-            else if (allBuildings[i].Health <= 0 && allBuildings[i] is DragonCave) dragonCaves.Remove(allBuildings[i] as DragonCave);
-        }
+            if (allBuildings[i].Health <= 0 && allBuildings[i] is Stockade)
+            {
+                stockades.Remove(allBuildings[i] as Stockade);
+            }
+            else if (allBuildings[i].Health <= 0 && allBuildings[i] is Forge)
+            {
+                forges.Remove(allBuildings[i] as Forge);
+                _bp.OnRuinsBuilding(forges.Count, _bp._forgeGO, _bp._ruinsForgeSprite);
+            }
+            else if (allBuildings[i].Health <= 0 && allBuildings[i] is Barracks)
+            {
+                barracks.Remove(allBuildings[i] as Barracks);
+                _bp.OnRuinsBuilding(barracks.Count, _bp._barrackGO, _bp._ruinsBarrackSprite);
+            }
+            else if (allBuildings[i].Health <= 0 && allBuildings[i] is MageTower)
+            {
+                mageTowers.Remove(allBuildings[i] as MageTower);
+                _bp.OnRuinsBuilding(mageTowers.Count, _bp._mageTowerGO, _bp._ruinsMageTowerSprite);
+            }
+            else if (allBuildings[i].Health <= 0 && allBuildings[i] is Market)
+            {
+                markets.Remove(allBuildings[i] as Market);
+                _bp.OnRuinsBuilding(markets.Count, _bp._marketGO, _bp._ruinsMarketSprite);
+            }
+            else if (allBuildings[i].Health <= 0 && allBuildings[i] is DragonCave)
+            {
+                dragonCaves.Remove(allBuildings[i] as DragonCave);
+            }
 
-        AddAllBuild();
+        }
+            AddAllBuild();
     }
 
     private void AddBuildForLoading<T>(List<T> pers, int count) where T : new()
