@@ -1477,12 +1477,12 @@ GameObject:
   - component: {fileID: 660799846}
   - component: {fileID: 660799845}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: FinalPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &660799844
 RectTransform:
   m_ObjectHideFlags: 0

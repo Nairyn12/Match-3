@@ -7,8 +7,31 @@ using System;
 
 public class GameManager : MonoBehaviour
 {
-    public event Action loadingDefenders;
-    public event Action savingDefenders;
+    public event Action loadingEvent;
+    public event Action savingEvent;
+    public event Action battleEvent;
+
+    private int _randomBetweenCountOfAttacks;
+    private int _countOfAttacks;
+    private int _betweenCountOfAttacks;
+
+    public int RandomBetweenCountOfAttacks
+    {
+        get => _randomBetweenCountOfAttacks;
+        set { _randomBetweenCountOfAttacks = value; }
+    }
+
+    public int CountOfAttacks
+    {
+        get => _countOfAttacks;
+        set { _countOfAttacks = value; }
+    }
+
+    public int BetweenCountOfAttacks
+    {
+        get => _betweenCountOfAttacks;
+        set { _betweenCountOfAttacks = value; }
+    }
 
     private int warriorsCount, knightsCount, heroesCount, healersCount, wizzardsCount, dragonsCount,
         stockadesCount, forgesCount, barracksCount, mageTowersCount, marketsCount, dragonCavesCount;
@@ -87,11 +110,6 @@ public class GameManager : MonoBehaviour
 
     private int nextSceneOffset;
 
-    private void Awake()
-    {
-        
-    }
-
     private void Start()
     {
         PlayerPrefs.GetInt("Gold", ResourcesContainer.gold);
@@ -102,7 +120,8 @@ public class GameManager : MonoBehaviour
 
         warriorsCount = PlayerPrefs.GetInt("Warrior", warriorsCount);
         knightsCount = PlayerPrefs.GetInt("Knight", knightsCount);
-        heroesCount = PlayerPrefs.GetInt("Hero", heroesCount);
+        heroesCount = 0;
+        //heroesCount = PlayerPrefs.GetInt("Hero", heroesCount);
         healersCount = PlayerPrefs.GetInt("Healer", healersCount);
         wizzardsCount = PlayerPrefs.GetInt("Wizzard", wizzardsCount);
         dragonsCount = PlayerPrefs.GetInt("Dragon", dragonsCount);
@@ -114,19 +133,38 @@ public class GameManager : MonoBehaviour
         marketsCount = PlayerPrefs.GetInt("Markets", marketsCount);
         dragonCavesCount = PlayerPrefs.GetInt("DragonCaves", dragonCavesCount);
 
-        Debug.Log("Количество воинов в загрузку: " + PlayerPrefs.GetInt("Warrior", warriorsCount));
-        Debug.Log("Уровень ограды в загрузку: " + PlayerPrefs.GetInt("Stockades", stockadesCount));
+        _countOfAttacks = PlayerPrefs.GetInt("CountOfAttacks", _countOfAttacks);
+        _betweenCountOfAttacks = PlayerPrefs.GetInt("BetweenCountOfAttacks", _betweenCountOfAttacks);
+        _randomBetweenCountOfAttacks = PlayerPrefs.GetInt("RandomBetweenCountOfAttacks", _randomBetweenCountOfAttacks);
 
-        loadingDefenders?.Invoke();        
+        Debug.Log("ЗАГРУЗКА _countOfAttacks: " + _countOfAttacks);
+        Debug.Log("ЗАГРУЗКА _betweenCountOfAttacks: " + _betweenCountOfAttacks);
+        Debug.Log("ЗАГРУЗКА _randomBetweenCountOfAttacks: " + _randomBetweenCountOfAttacks);
+
+        loadingEvent?.Invoke();        
     }
 
     public void LoadingSceneInOrder()
     {
+        Debug.Log("Номер сцены: " + SceneManager.GetActiveScene().buildIndex);
+
+        if (SceneManager.GetActiveScene().buildIndex == 1 && _betweenCountOfAttacks >= _randomBetweenCountOfAttacks)
+        {
+            battleEvent?.Invoke();
+            return;
+        }        
+
         nextSceneOffset = 1;
         SaveResources();
         SaveDefenders();
         SaveBuilds();
         StartCoroutine(LoadScreen());
+
+        SaveCountOfAttacks();
+
+        Debug.Log("СОХРАНЕНИЕ _countOfAttacks: " + _countOfAttacks);
+        Debug.Log("СОХРАНЕНИЕ _betweenCountOfAttacks: " + _betweenCountOfAttacks);
+        Debug.Log("СОХРАНЕНИЕ _randomBetweenCountOfAttacks: " + _randomBetweenCountOfAttacks);
     }
 
     public void LoadingPreviousScene()
@@ -135,7 +173,11 @@ public class GameManager : MonoBehaviour
         SaveResources();
         SaveDefenders();
         SaveBuilds();
+        SaveCountOfAttacks();
         StartCoroutine(LoadScreen());
+        Debug.Log("СОХРАНЕНИЕ _countOfAttacks: " + _countOfAttacks);
+        Debug.Log("СОХРАНЕНИЕ _betweenCountOfAttacks: " + _betweenCountOfAttacks);
+        Debug.Log("СОХРАНЕНИЕ _randomBetweenCountOfAttacks: " + _randomBetweenCountOfAttacks);
     }
 
     public void QuitFromGame()
@@ -143,6 +185,7 @@ public class GameManager : MonoBehaviour
         SaveResources();
         SaveDefenders();
         SaveBuilds();
+        SaveCountOfAttacks();
         Application.Quit();
     }
 
@@ -167,9 +210,9 @@ public class GameManager : MonoBehaviour
 
     private void SaveDefenders ()
     {
-        savingDefenders?.Invoke();
+        savingEvent?.Invoke();
 
-        Debug.Log("Количество воинов в сохранение: " + warriorsCount);
+        //Debug.Log("Количество воинов в сохранение: " + warriorsCount);
         //Debug.Log("Количество рыцарей в сохранение: " + knightsCount);
         //Debug.Log("Количество героев в сохранение: " + heroesCount);
         //Debug.Log("Количество лекарей в сохранение: " + healersCount);
@@ -188,9 +231,9 @@ public class GameManager : MonoBehaviour
 
     private void SaveBuilds()
     {
-        savingDefenders?.Invoke();
+        savingEvent?.Invoke();
 
-        Debug.Log("Уровень ограды сохранение: " + stockadesCount);
+        //Debug.Log("Уровень ограды сохранение: " + stockadesCount);
         //Debug.Log("Количество рыцарей в сохранение: " + knightsCount);
         //Debug.Log("Количество героев в сохранение: " + heroesCount);
         //Debug.Log("Количество лекарей в сохранение: " + healersCount);
@@ -207,8 +250,17 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    IEnumerator LoadScreen()
+    private void SaveCountOfAttacks()
     {
+        savingEvent?.Invoke();
+
+        PlayerPrefs.SetInt("CountOfAttacks", _countOfAttacks);
+        PlayerPrefs.SetInt("BetweenCountOfAttacks", _betweenCountOfAttacks);
+        PlayerPrefs.SetInt("RandomBetweenCountOfAttacks", _randomBetweenCountOfAttacks);
+    }
+
+    IEnumerator LoadScreen()
+    {        
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + nextSceneOffset);
 
         while (!asyncLoad.isDone)

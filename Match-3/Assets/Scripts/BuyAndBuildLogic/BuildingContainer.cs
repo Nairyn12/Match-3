@@ -65,8 +65,13 @@ public class BuildingContainer : MonoBehaviour
 
     private void Awake()
     {
-        gm.loadingDefenders += AddBuildLoading;
-        gm.savingDefenders += AddSavingBuildCount;
+        gm.loadingEvent += AddBuildLoading;
+        gm.savingEvent += AddSavingBuildCount;
+    }
+
+    private void Start()
+    {
+        
     }
 
     public void AddListBuild(int variant)
@@ -186,9 +191,19 @@ public class BuildingContainer : MonoBehaviour
         AddBuildForLoading(markets, gm.MarketsCount);
         AddBuildForLoading(dragonCaves, gm.DragonCavesCount);
 
+        Debug.Log("forges.Count " + forges.Count);
+        Debug.Log("barracks.Count " + barracks.Count);
+        Debug.Log("mageTowers.Count " + mageTowers.Count);
+        Debug.Log("markets.Count " + markets.Count);
+
+        _bp.OnBuilding(forges.Count, _bp._forgeGO);
+        _bp.OnBuilding(barracks.Count, _bp._barrackGO);
+        _bp.OnBuilding(mageTowers.Count, _bp._mageTowerGO);
+        _bp.OnBuilding(markets.Count, _bp._marketGO);
+
         PrintCountBuildings();
 
-        Debug.Log("ÇÀÃĞÓÆÀÅÌ ÓĞÎÂÅÍÜ ÇÄÀÍÈÉ " + gm.WarriorsCount);
+        //Debug.Log("ÇÀÃĞÓÆÀÅÌ ÓĞÎÂÅÍÜ ÇÄÀÍÈÉ " + gm.WarriorsCount);
     }
 
     private void AddSavingBuildCount()
@@ -200,6 +215,6 @@ public class BuildingContainer : MonoBehaviour
         gm.MarketsCount = markets.Count;
         gm.DragonCavesCount = dragonCaves.Count;
 
-        Debug.Log("ÑÎÕĞÀÍßÅÌ ÓĞÎÂÅÍÜ ÇÄÀÍÈÉ " + gm.StockadesCount);
+        //Debug.Log("ÑÎÕĞÀÍßÅÌ ÓĞÎÂÅÍÜ ÇÄÀÍÈÉ " + gm.StockadesCount);
     }
 }

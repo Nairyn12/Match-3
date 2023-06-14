@@ -70,8 +70,8 @@ public class DefendersContainer : MonoBehaviour
 
     private void Awake()
     {
-        gm.loadingDefenders += AddPersLoading;
-        gm.savingDefenders += AddSavingPersCount;
+        gm.loadingEvent += AddPersLoading;
+        gm.savingEvent += AddSavingPersCount;
     }    
 
     public void AddListPers(int variant)
@@ -142,7 +142,7 @@ public class DefendersContainer : MonoBehaviour
 
         PrintCountPers();
 
-        Debug.Log("гюцпсфюел йнкхвеярбн гюыхрмхйнб " + gm.WarriorsCount);
+        //Debug.Log("гюцпсфюел йнкхвеярбн гюыхрмхйнб " + gm.WarriorsCount);
     }
 
     private void AddSavingPersCount ()
@@ -154,7 +154,7 @@ public class DefendersContainer : MonoBehaviour
         gm.WizzardsCount = wizzards.Count;
         gm.DragonsCount = dragons.Count;
 
-        Debug.Log("янупюмъел йнкхвеярбн гюыхрмхйнб " + gm.WarriorsCount);
+        //Debug.Log("янупюмъел йнкхвеярбн гюыхрмхйнб " + gm.WarriorsCount);
     }
 
     public void RemovePers(Character pers)

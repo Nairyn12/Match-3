@@ -14,6 +14,7 @@ public class BattleScript : MonoBehaviour
     [SerializeField] EnemiesContainer enemies;
     [SerializeField] DefendersContainer defenders;
     [SerializeField] BuildingContainer buildings;
+    [SerializeField] GameManager gm;
     [SerializeField] private bool roundOfDefender;
     [SerializeField] private SurpriseAttack sa;
 
@@ -23,6 +24,7 @@ public class BattleScript : MonoBehaviour
     {
         battlePanel.SetActive(false);
         closeButton.SetActive(false);
+        gm.battleEvent += StartBattlePanel;
     }
 
     private void Update()

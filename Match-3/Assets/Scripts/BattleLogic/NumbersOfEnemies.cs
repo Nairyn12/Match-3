@@ -10,6 +10,7 @@ public class NumbersOfEnemies : MonoBehaviour
     [SerializeField] private BuildingContainer buildings;
     [SerializeField] private CountAttackContainer countAttack;
 
+
     public void CountingTheNumberOfEnemies()
     {
         defenders.AddAllPersWithoutHealers();
@@ -20,13 +21,21 @@ public class NumbersOfEnemies : MonoBehaviour
 
         int countEnemies = Random.Range((defenders.AllDefenders.Count + countOfBuild/2 - differenceMin), (defenders.AllDefenders.Count + countOfBuild/2 + differenceMax));
 
-        CalculateDifference(ref countEnemies, enemies.Bandits, 1);
-        CalculateDifference(ref countEnemies, enemies.Bullies, 1);
-        if (buildings.Stockades.Count != 0) CalculateDifference(ref countEnemies, enemies.Fiends, 2);
-        if (countAttack.AttackCount > 5 && buildings.Barracks.Count != 0) CalculatePlagueDoctors(ref countEnemies);
-        if (countAttack.AttackCount > 10 && buildings.MageTowers.Count != 0) CalculateDifference(ref countEnemies, enemies.Warlocks, 1);
-        if (countAttack.AttackCount > 15 && (enemies.Warlocks.Count > 5 || buildings.DragonCaves.Count > 0)) CalculateDifference(ref countEnemies, enemies.Beasts, 1);
-        if (countEnemies != 0) CalculateDifference(ref countEnemies, enemies.Bandits, 1);
+        if (defenders.AllDefenders.Count == 0)
+        {
+            int count = 2;
+            CalculateDifference(ref countEnemies, enemies.Bandits, 0);
+        }
+        else
+        {
+            CalculateDifference(ref countEnemies, enemies.Bandits, 1);
+            CalculateDifference(ref countEnemies, enemies.Bullies, 1);
+            if (buildings.Stockades.Count != 0) CalculateDifference(ref countEnemies, enemies.Fiends, 2);
+            if (countAttack.AttackCount > 5 && buildings.Barracks.Count != 0) CalculatePlagueDoctors(ref countEnemies);
+            if (countAttack.AttackCount > 10 && buildings.MageTowers.Count != 0) CalculateDifference(ref countEnemies, enemies.Warlocks, 1);
+            if (countAttack.AttackCount > 15 && (enemies.Warlocks.Count > 5 || buildings.DragonCaves.Count > 0)) CalculateDifference(ref countEnemies, enemies.Beasts, 1);
+            if (countEnemies != 0) CalculateDifference(ref countEnemies, enemies.Bandits, 1);
+        }
 
         enemies.AddAllPersWithoutPlagDoc();
         enemies.AddAllPers();
