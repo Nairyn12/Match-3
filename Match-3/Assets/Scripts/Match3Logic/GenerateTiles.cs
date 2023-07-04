@@ -15,6 +15,9 @@ public class GenerateTiles : MonoBehaviour
     [SerializeField] private StartPositionController[] spc;
     [SerializeField] private List<TileEnvironmentDeterminer> tilesOnField;
 
+    [SerializeField] private SoundsController _sc;
+
+
     public List<TileEnvironmentDeterminer> PoolTilesTED
     {
         get { return poolTilesTED; }
@@ -96,7 +99,7 @@ public class GenerateTiles : MonoBehaviour
 
         if (check)
         {            
-            ShufflingMatchTiles(ref matchTiles);            
+            ShufflingMatchTiles(ref matchTiles, true);            
             FieldPreparation(positionOnChange, poolTiles);            
         }        
     }
@@ -134,19 +137,17 @@ public class GenerateTiles : MonoBehaviour
         }
     }
 
-    public void ShufflingMatchTiles(ref List<TileEnvironmentDeterminer> deleteTile)
-    {
-        //Debug.Log("УНИЧТОЖЕНИЕ!");
+    public void ShufflingMatchTiles(ref List<TileEnvironmentDeterminer> deleteTile, bool isStartGame)
+    {        
         for (int i = 0; i < deleteTile.Count; i++)
         {            
             positionOnChange.Add(deleteTile[i].transform.position);
             poolTilesTED.Add(deleteTile[i]);
-            tilesOnField.Remove(deleteTile[i]);
-            //DebugText(deleteTile[i]);
-            //Debug.Log(deleteTile[i].gameObject.name);
+            tilesOnField.Remove(deleteTile[i]);            
             deleteTile[i].ZeroingNeighboringTiles();
             deleteTile[i].IsMoving = false;
-            deleteTile[i].gameObject.SetActive(false);            
+            deleteTile[i].gameObject.SetActive(false);
+            _sc.PlaySoundDestroyTiles();
         }
 
         deleteTile.Clear();
@@ -179,15 +180,5 @@ public class GenerateTiles : MonoBehaviour
         {
             tilesOnField[i].FindAllNeighboringTiles();        
         }
-    }    
-
-    private void DebugText(TileEnvironmentDeterminer ted)
-    {
-        if (ted.MatchTilesUp != null) Debug.Log(ted.gameObject.name + " Верхний: " + ted.MatchTilesUp.gameObject.name  );
-        if (ted.MatchTilesDown != null) Debug.Log(ted.gameObject.name + " Нижний: " + ted.MatchTilesDown.gameObject.name);
-        if (ted.MatchTilesRight != null) Debug.Log(ted.gameObject.name + " Правый: " + ted.MatchTilesRight.gameObject.name);
-        if (ted.MatchTilesLeft != null) Debug.Log(ted.gameObject.name + " Левый: " + ted.MatchTilesLeft.gameObject.name);
     }
-
-    
 }

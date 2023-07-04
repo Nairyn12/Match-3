@@ -10,7 +10,7 @@ public class MatchAndDestroy : MonoBehaviour
     [SerializeField] private MovingTilesByMouse moveTiles;
 
     [SerializeField] private List<TileEnvironmentDeterminer> matchingTiles;
-    [SerializeField] private FallingTiles ft;    
+    [SerializeField] private FallingTiles ft;
     
     private TileEnvironmentDeterminer ted1, ted2;
     private ResourceCounter rc;    
@@ -52,8 +52,6 @@ public class MatchAndDestroy : MonoBehaviour
         }        
 
         matchingTiles = tempMatchTiles.Distinct().ToList();
-
-        //Debug.Log("Нашли совпадения!" + matchingTiles.Count);
     }
 
     public void GetMatchFromTile(List<TileEnvironmentDeterminer> matchTiles, TileEnvironmentDeterminer checkTile)
@@ -67,10 +65,7 @@ public class MatchAndDestroy : MonoBehaviour
             CheckTiles(matchTiles, checkTile.MatchTilesRight, checkTile.MatchTilesRight?.MatchTilesRight, checkTile);
             CheckTiles(matchTiles, checkTile.MatchTilesLeft, checkTile.MatchTilesLeft?.MatchTilesLeft, checkTile);           
         }
-    }
-
-     
-
+    } 
 
     private void CheckTiles(List<TileEnvironmentDeterminer> matchTiles, TileEnvironmentDeterminer checkTileOne,
         TileEnvironmentDeterminer checkTileTwo, TileEnvironmentDeterminer center)
@@ -98,8 +93,9 @@ public class MatchAndDestroy : MonoBehaviour
         gt.DeterminationAllAdjacentTiles();
         ft.WorkWithMovingTiles();
         yield return new WaitForSeconds(0.1f);
+       
         rc.ConsiderResources(matchingTiles);
-        gt.ShufflingMatchTiles(ref matchingTiles);       
+        gt.ShufflingMatchTiles(ref matchingTiles, false);
         
     }
 }
