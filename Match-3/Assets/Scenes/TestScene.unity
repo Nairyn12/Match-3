@@ -323,7 +323,8 @@ MonoBehaviour:
   _tiles: []
   _lineTiles: []
   _columnTiles: []
-  matchTiles: []
+  _matchTiles: []
+  _isRefind: 0
 --- !u!114 &2040625254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -339,4 +340,4 @@ MonoBehaviour:
   cam: {fileID: 261315458}
   _gen: {fileID: 2040625253}
   isCoroutine: 0
-  speedDragging: 10
+  speedDragging: 7
