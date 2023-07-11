@@ -94,7 +94,7 @@ public class MatchAndDestroy : MonoBehaviour
         ft.WorkWithMovingTiles();
         yield return new WaitForSeconds(0.1f);
        
-        rc.ConsiderResources(matchingTiles);
+        //rc.ConsiderResources(matchingTiles);
         gt.ShufflingMatchTiles(ref matchingTiles, false);
         
     }

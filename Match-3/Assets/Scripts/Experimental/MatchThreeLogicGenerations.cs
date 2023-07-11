@@ -7,23 +7,38 @@ using System.Linq;
 public class MatchThreeLogicGenerations : MonoBehaviour
 {
     [SerializeField] private Tile _tile;
-
     [SerializeField] List<Tile> _tiles = new (300);
     [SerializeField] List<Tile> _lineTiles;
     [SerializeField] List<Tile> _columnTiles;
     [SerializeField] List<List<Tile>> _tilesOnField = new();
     [SerializeField] private List<Tile> _matchTiles = new List<Tile>();
-    
+    [SerializeField] private ResourceCounter _rc;
+    [SerializeField] private SoundsController _sc;
+    [SerializeField] private ParticleMatch _pm;
+    [SerializeField] private CounterMoves _cm;
+
     private int _width = 10;
     private int _height = 10;
-    [SerializeField] private bool _isRefind;
+    private bool _isRefind;
+    [SerializeField] private bool _isCheckMatchAfter;
 
     public List<List<Tile>> TilesOnField { get => _tilesOnField; set => _tilesOnField = value; }
+
+    public bool CanBeMovedByMouse { get; set; }
 
     private void Start()
     {
         TilesPreparation();
         PrepareField();
+        CanBeMovedByMouse = true;
+    }
+
+    private void Update()
+    {
+        if (_isCheckMatchAfter)
+        {
+            CheckMatchAfterMoveTile();
+        }
     }
 
     private void TilesPreparation()
@@ -256,18 +271,22 @@ public class MatchThreeLogicGenerations : MonoBehaviour
         if (!_isRefind)
         {
             _isRefind = true;
+            Debug.Log("Check match!!!!!!!!");
             FindMatch();
         }       
     }
 
-    public void FindMatch()
+    public bool FindMatch()
     {
+        CanBeMovedByMouse = false;
+        bool isMatch = false;
+
         for (int x = 0; x < _width; x++)
         {
             if (x != 9 && x != 0)
             {
                 for (int y = 0; y < _height; y++)
-                {
+                {                    
                     if (_tilesOnField[x][y] != null && _tilesOnField[x + 1][y] != null &&
                         _tilesOnField[x - 1][y] != null)
                     {
@@ -276,7 +295,10 @@ public class MatchThreeLogicGenerations : MonoBehaviour
                         {
                             _matchTiles.Add(_tilesOnField[x][y]);
                             _matchTiles.Add(_tilesOnField[x + 1][y]);
-                            _matchTiles.Add(_tilesOnField[x - 1][y]);                            
+                            _matchTiles.Add(_tilesOnField[x - 1][y]);
+
+                            isMatch = true;
+                            Debug.Log("+++++++++++++++++++++++++++++++++++++++++++++++Совпадения по горизонтали найдены");
                         }
                     }
                 }
@@ -297,7 +319,10 @@ public class MatchThreeLogicGenerations : MonoBehaviour
                         {
                             _matchTiles.Add(_tilesOnField[x][y]);
                             _matchTiles.Add(_tilesOnField[x][y + 1]);
-                            _matchTiles.Add(_tilesOnField[x][y - 1]);                            
+                            _matchTiles.Add(_tilesOnField[x][y - 1]);
+
+                            isMatch = true;
+                            Debug.Log("+++++++++++++++++++++++++++++++++++++++++++++++Совпадения по вертикали найдены");
                         }
                     }
                 }
@@ -307,12 +332,11 @@ public class MatchThreeLogicGenerations : MonoBehaviour
         if (_matchTiles.Count > 0)
         {
             DestroyMatchTile();
-            FindAndStartMoveTiles();
+            FindAndStartMoveTiles();            
         }
-        else
-        {
-            if (_isRefind) _isRefind = false;
-        }
+       
+        _isRefind = false;
+        return isMatch;
     }
 
     private void RemoveDuplicateTile()
@@ -362,10 +386,12 @@ public class MatchThreeLogicGenerations : MonoBehaviour
                 }
             }        
         }
-        
+
+        _rc.ConsiderResources(_matchTiles);
+        _sc.PlaySoundDestroyTiles();
         ReturnToPoolAndShutdownTile();
         ClearPool(_matchTiles);
-        if (_isRefind) _isRefind = false;
+        //if (_isRefind) _isRefind = false;
     }
 
     private void ReturnToPoolAndShutdownTile()
@@ -374,6 +400,7 @@ public class MatchThreeLogicGenerations : MonoBehaviour
         {
             _tiles.Add(_matchTiles[i]);
             _matchTiles[i].gameObject.SetActive(false);
+            _pm.PlayParticleSystem(_matchTiles[i]);
         }        
     }
 
@@ -383,11 +410,12 @@ public class MatchThreeLogicGenerations : MonoBehaviour
     }
 
     public void FindAndStartMoveTiles()
-    {        
+    {
+        int fullTile = 0;
         for (int i = 0; i < _tilesOnField.Count; i++)
         {           
             int voidTile = 0;
-            int fullTile = 0;
+            
             
             for (int j = 0; j < _tilesOnField[i].Count; j++)
             {                
@@ -404,8 +432,11 @@ public class MatchThreeLogicGenerations : MonoBehaviour
                     _tilesOnField[i][j - voidTile].TargetPos = new Vector2(i, j - voidTile);
                     _tilesOnField[i][j - voidTile].IsMoving = true;
 
-                    if (fullTile == 0) _tilesOnField[i][j - voidTile].IsRefindMatch = true;
-
+                    if (fullTile == 0 && !_tilesOnField[i][j - voidTile].IsRefindMatch)
+                    {
+                        _tilesOnField[i][j - voidTile].IsRefindMatch = true;
+                        Debug.Log("_tilesOnField[i][j - voidTile] " + _tilesOnField[i][j - voidTile].name + " isRefind: " + _isRefind);
+                    }
                     fullTile++;                    
                 }                
             }
@@ -427,8 +458,10 @@ public class MatchThreeLogicGenerations : MonoBehaviour
             random[i].IsMoving = true;
             random[i].TargetPos = new Vector2(position.x, random[i].transform.position.y - lenght);
 
-            Debug.Log(random[i].gameObject.name + " имеет направление к " + random[i].TargetPos + " при этом создан в позиции " + random[i].gameObject.transform.position +
-                " //итерация i = " + i + " //количество пустых тайлов в столбце: " + lenght);
+            
+
+            //Debug.Log(random[i].gameObject.name + " имеет направление к " + random[i].TargetPos + " при этом создан в позиции " + random[i].gameObject.transform.position +
+            //" //итерация i = " + i + " //количество пустых тайлов в столбце: " + lenght);
         }
         
         for (int i = 0; i < _tilesOnField[(int)position.x].Count; i++)
@@ -442,19 +475,42 @@ public class MatchThreeLogicGenerations : MonoBehaviour
                 }
             }            
         }
+
+        _isCheckMatchAfter = true;
     }
 
-    private float TargetMovingNewTile(int line)
+    private void CheckMatchAfterMoveTile()
     {
-        float target = 10;
-        for (int i = 0; i < 10; i++)
+        bool isChecking = false;
+
+        for (int x = 0; x < _tilesOnField.Count; x++)
         {
-            if (_tilesOnField[line][i] != null)
+            for (int y = 0; y < _tilesOnField[x].Count; y++)
             {
-                target = i + 1;
-            }           
+                if (_tilesOnField[x][y].IsMoving || _tilesOnField[x][y].IsRefindMatch)
+                {
+                    isChecking = true;
+                }
+            }
         }
-        return target;
+
+        if (!isChecking)
+        {
+            _isCheckMatchAfter = false;
+            StartCoroutine(RefindMatchDelay());
+        }
+    }
+
+
+    IEnumerator RefindMatchDelay()
+    {
+        yield return new WaitForSeconds(0.25f);        
+        //FindMatch();
+        if (!FindMatch())
+        {
+            CanBeMovedByMouse = true;
+            if (_cm.CountOfMoves <= 44) _cm.OnFinishPanel();
+        }
     }
 }
 

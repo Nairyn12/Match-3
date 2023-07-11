@@ -37,12 +37,9 @@ public class CounterMoves : MonoBehaviour
 
     public void OnFinishPanel ()
     {
-        if (countOfMoves < 44)
-        {
-            if (!finishPanel.activeInHierarchy) finishPanel.SetActive(true);
-            buyMovesButton.GetComponent<Graphic>().color = Color.gray;
-            buyMovesButton.GetComponent<Button>().interactable = false;
-        }
+        if (!finishPanel.activeInHierarchy) finishPanel.SetActive(true);
+        buyMovesButton.GetComponent<Graphic>().color = Color.gray;
+        buyMovesButton.GetComponent<Button>().interactable = false;        
     }
 
     public void OffFinishPanel()

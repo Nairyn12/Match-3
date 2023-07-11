@@ -7,10 +7,8 @@ public class Tile : MonoBehaviour
 {
     public Action refindMatch;
 
-
     [SerializeField] private TilesObject _tilesObject;
-    [SerializeField] private SpriteRenderer _renderer;
-    //[SerializeField] private MatchThreeLogicGenerations _logic;
+    [SerializeField] private SpriteRenderer _renderer;   
 
     private string tempType;
 
@@ -57,6 +55,7 @@ public class Tile : MonoBehaviour
 
         typeOfTiles = _tilesObject.IdTags[r];
         _renderer.sprite = _tilesObject.TypeOfTiles[typeOfTiles];
+        _renderer.sortingOrder = -3;
     }
 
     public void Falling()
@@ -80,10 +79,10 @@ public class Tile : MonoBehaviour
 
     IEnumerator RefindMatchDelay()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.25f);
         Debug.Log("œ≈–≈œ–Œ¬≈– ¿ ¬€«¬¿Õ¿ “¿…ÀŒÃ " + gameObject.name + " " + gameObject.transform.position.x + " " + gameObject.transform.position.y);
-        refindMatch?.Invoke();
         isRefindMatch = false;
+        refindMatch?.Invoke();        
     }
 
 

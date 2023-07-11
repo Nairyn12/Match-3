@@ -5,16 +5,15 @@ using UnityEngine;
 
 public class TileDragging : MonoBehaviour
 {
-    [SerializeField] private Camera cam;
+    [SerializeField] private Camera _cam;
     [SerializeField] private MatchThreeLogicGenerations _gen;
-    [SerializeField] private bool isCoroutine;
+    [SerializeField] private CounterMoves _cm;
+    [SerializeField] private bool isCoroutine;    
     [SerializeField] private float speedDragging;
 
     private Tile _tile1, _tile2;
     private Vector2 startPosMouse, endPosMouse;   
     private Vector2 targetPoint1, targetPoint2;
-
-    
 
     private void Start()
     {
@@ -23,12 +22,12 @@ public class TileDragging : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && _gen.CanBeMovedByMouse && _cm.CountOfMoves > 0)
         {
             if (_gen.SelectedTile() != null)
             {                
                 _tile1 = _gen.SelectedTile();
-                startPosMouse = cam.ScreenToWorldPoint(Input.mousePosition);
+                startPosMouse = _cam.ScreenToWorldPoint(Input.mousePosition);
                 targetPoint1 = _tile1.gameObject.transform.position;
                 StartCoroutine(TrackTheMovement());
             }
@@ -105,7 +104,7 @@ public class TileDragging : MonoBehaviour
         
         if (Input.GetKey(KeyCode.Mouse0))
         {            
-            endPosMouse = cam.ScreenToWorldPoint(Input.mousePosition);
+            endPosMouse = _cam.ScreenToWorldPoint(Input.mousePosition);
             PermutationOfTiles();            
         }
         else
@@ -122,6 +121,7 @@ public class TileDragging : MonoBehaviour
         {            
             _gen.FindMatch();           
             ClearingTheValues();
+            _cm.CountOfMoves--;
         }
         else
         {
