@@ -123,6 +123,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &293520051 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9094249504377327319, guid: 03c3b0ab91d607244a98d2339006828f, type: 3}
+  m_PrefabInstance: {fileID: 9094249504138220196}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &363269936
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,6 +201,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &366433389 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9094249505199650766, guid: 03c3b0ab91d607244a98d2339006828f, type: 3}
+  m_PrefabInstance: {fileID: 9094249504138220196}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &441484735
 GameObject:
   m_ObjectHideFlags: 0
@@ -840,7 +862,7 @@ AudioSource:
   m_GameObject: {fileID: 2010946832}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -8997022112225955798, guid: 5ed8084f10d719847b4e631dbc52c462, type: 2}
   m_audioClip: {fileID: 8300000, guid: a423c44e3d86c8c44ac677ddea814dff, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -954,8 +976,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ebff97b2ffc81c4bbac035ec060fe13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gm: {fileID: 2032597370}
   _soundForButton: {fileID: 2010946836}
   _soundDestroyTiles: {fileID: 0}
+  am: {fileID: 24100000, guid: 5ed8084f10d719847b4e631dbc52c462, type: 2}
+  musicSlider: {fileID: 366433389}
+  soundSlider: {fileID: 293520051}
 --- !u!82 &2010946836
 AudioSource:
   m_ObjectHideFlags: 0
@@ -965,7 +991,7 @@ AudioSource:
   m_GameObject: {fileID: 2010946832}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 7819662906638434271, guid: 5ed8084f10d719847b4e631dbc52c462, type: 2}
   m_audioClip: {fileID: 8300000, guid: 7e5745afffbcd0e4aaa8fce19523a3d2, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -1353,6 +1379,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9094249504377327319, guid: 03c3b0ab91d607244a98d2339006828f, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2010946835}
+    - target: {fileID: 9094249504377327319, guid: 03c3b0ab91d607244a98d2339006828f, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SoundVolume
+      objectReference: {fileID: 0}
     - target: {fileID: 9094249504382378604, guid: 03c3b0ab91d607244a98d2339006828f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1400,6 +1434,14 @@ PrefabInstance:
     - target: {fileID: 9094249505130357567, guid: 03c3b0ab91d607244a98d2339006828f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 9094249505199650766, guid: 03c3b0ab91d607244a98d2339006828f, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2010946835}
+    - target: {fileID: 9094249505199650766, guid: 03c3b0ab91d607244a98d2339006828f, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: MusicVolume
       objectReference: {fileID: 0}
     - target: {fileID: 9094249505455645397, guid: 03c3b0ab91d607244a98d2339006828f, type: 3}
       propertyPath: m_Name

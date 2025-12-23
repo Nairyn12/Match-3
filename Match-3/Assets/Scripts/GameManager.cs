@@ -107,8 +107,13 @@ public class GameManager : MonoBehaviour
         get => dragonCavesCount;
         set { dragonCavesCount = value; }
     }
-
+    
     private int nextSceneOffset;
+
+    private float _soundVolume = 5.0f, _musicVolume = 5.0f;
+    public float SoundVolume { get => _soundVolume; set => _soundVolume = value; }
+    public float MusicVolume { get => _musicVolume; set => _musicVolume = value; }
+
 
     private void Start()
     {
@@ -137,6 +142,9 @@ public class GameManager : MonoBehaviour
         _betweenCountOfAttacks = PlayerPrefs.GetInt("BetweenCountOfAttacks", _betweenCountOfAttacks);
         _randomBetweenCountOfAttacks = PlayerPrefs.GetInt("RandomBetweenCountOfAttacks", _randomBetweenCountOfAttacks);
 
+        _soundVolume = PlayerPrefs.GetFloat("Sound", _soundVolume);
+        _musicVolume = PlayerPrefs.GetFloat("Music", _musicVolume);
+
         Debug.Log("«¿√–”« ¿ _countOfAttacks: " + _countOfAttacks);
         Debug.Log("«¿√–”« ¿ _betweenCountOfAttacks: " + _betweenCountOfAttacks);
         Debug.Log("«¿√–”« ¿ _randomBetweenCountOfAttacks: " + _randomBetweenCountOfAttacks);
@@ -158,6 +166,7 @@ public class GameManager : MonoBehaviour
         SaveResources();
         SaveDefenders();
         SaveBuilds();
+        SaveMusicSound();
         StartCoroutine(LoadScreen());
 
         SaveCountOfAttacks();
@@ -173,6 +182,7 @@ public class GameManager : MonoBehaviour
         SaveResources();
         SaveDefenders();
         SaveBuilds();
+        SaveMusicSound();
         SaveCountOfAttacks();
         StartCoroutine(LoadScreen());
         Debug.Log("—Œ’–¿Õ≈Õ»≈ _countOfAttacks: " + _countOfAttacks);
@@ -185,6 +195,7 @@ public class GameManager : MonoBehaviour
         SaveResources();
         SaveDefenders();
         SaveBuilds();
+        SaveMusicSound();
         SaveCountOfAttacks();
         Application.Quit();
     }
@@ -257,6 +268,12 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetInt("CountOfAttacks", _countOfAttacks);
         PlayerPrefs.SetInt("BetweenCountOfAttacks", _betweenCountOfAttacks);
         PlayerPrefs.SetInt("RandomBetweenCountOfAttacks", _randomBetweenCountOfAttacks);
+    }
+
+    private void SaveMusicSound()
+    {
+        PlayerPrefs.SetFloat("Sound", _soundVolume);
+        PlayerPrefs.SetFloat("Music", _musicVolume);
     }
 
     IEnumerator LoadScreen()

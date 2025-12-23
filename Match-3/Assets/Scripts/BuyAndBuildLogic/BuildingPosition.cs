@@ -28,7 +28,7 @@ public class BuildingPosition : MonoBehaviour
 
     public void OnBuilding(int quantity, GameObject build)
     {
-        if (quantity == 1)
+        if (quantity > 1)
             build.SetActive(true);
     }
 
